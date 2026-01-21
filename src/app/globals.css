@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  /* Cream background matching realfood.gov */
+  --cream: #F7F6F1;
+  --cream-dark: #EDEBE6;
+  
+  /* Ink colors */
+  --ink: #1A1A1A;
+  --ink-light: #3D3D3D;
+  --ink-muted: #6B6B6B;
+  --ink-subtle: #9A9A9A;
+  
+  /* Pyramid colors */
+  --pyramid-green: #4A9B4F;
+  --pyramid-amber: #D4A853;
+  --pyramid-gray: #D4D4D4;
+  
+  --background: var(--cream);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-public-sans), system-ui, sans-serif;
+  --font-display: var(--font-instrument-serif), Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-public-sans), system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Selection color */
+::selection {
+  background: var(--pyramid-green);
+  color: white;
+}
+
+/* Smooth scrolling sections */
+section {
+  scroll-snap-align: start;
+}
+
+/* Button base styles */
+button {
+  cursor: pointer;
+}
+
+/* Emoji shadows for depth */
+.drop-shadow-lg {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+/* Animation for scroll indicator */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1.5s ease-in-out infinite;
+}
