@@ -56,12 +56,52 @@ export default function PlateCheck() {
   };
 
   const processImage = (file: File) => {
+    // Compress and resize image before processing
+    const img = new Image();
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result as string;
-      setImage(result);
-      setAnalysis(null);
-      setError(null);
+      
+      img.onload = () => {
+        // Max dimension of 1024px for API efficiency
+        const MAX_SIZE = 1024;
+        let { width, height } = img;
+        
+        if (width > height) {
+          if (width > MAX_SIZE) {
+            height = (height * MAX_SIZE) / width;
+            width = MAX_SIZE;
+          }
+        } else {
+          if (height > MAX_SIZE) {
+            width = (width * MAX_SIZE) / height;
+            height = MAX_SIZE;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress as JPEG at 85% quality
+        ctx?.drawImage(img, 0, 0, width, height);
+        const compressedImage = canvas.toDataURL('image/jpeg', 0.85);
+        
+        setImage(compressedImage);
+        setAnalysis(null);
+        setError(null);
+      };
+      
+      img.onerror = () => {
+        // Fallback to original if image processing fails
+        setImage(result);
+        setAnalysis(null);
+        setError(null);
+      };
+      
+      img.src = result;
     };
     reader.readAsDataURL(file);
   };

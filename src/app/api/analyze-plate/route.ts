@@ -12,7 +12,9 @@ The New Pyramid prioritizes:
 2. VEGETABLES & FRUITS: Colorful, whole, minimally processed
 3. WHOLE GRAINS (smallest portion): Oats, brown rice, quinoa - NOT refined carbs
 
-Respond in this exact JSON format:
+IMPORTANT: Be flexible when identifying food! Even if the image is slightly blurry, at an angle, partially visible, or taken in low light, do your best to identify what foods are present. Look for ANY food items - meals, snacks, drinks, ingredients, etc. If you can make a reasonable guess about what food is shown, provide your analysis.
+
+Respond in this exact JSON format (no markdown, just raw JSON):
 {
   "foodItems": ["item1", "item2", "item3"],
   "macroEstimate": {
@@ -37,7 +39,7 @@ Respond in this exact JSON format:
   }
 }
 
-Be encouraging but honest. The macro percentages should add up to 100. The overall score is 0-100. Stars are 1-5.`;
+Be encouraging but honest. The macro percentages should add up to 100. The overall score is 0-100. Stars are 1-5. Only respond with the JSON object, no other text.`;
 
 export async function POST(request: NextRequest) {
   try {
@@ -71,6 +73,10 @@ Keep the foodItems array exactly as provided. Estimate macros, score, and feedba
     } 
     // Otherwise, analyze the image
     else if (image) {
+      // Log image size for debugging
+      const imageSizeKB = Math.round((image.length * 3) / 4 / 1024);
+      console.log(`Processing image: ${imageSizeKB}KB, type: ${mediaType}`);
+      
       response = await anthropic.messages.create({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1024,
@@ -118,17 +124,32 @@ Analyze this plate image. If the image doesn't show food, respond with: {"error"
       if (jsonMatch) {
         jsonStr = jsonMatch[1];
       }
+      // Also try to find JSON without code blocks
+      if (!jsonMatch) {
+        const plainJsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+        if (plainJsonMatch) {
+          jsonStr = plainJsonMatch[0];
+        }
+      }
       analysis = JSON.parse(jsonStr);
     } catch {
-      // If JSON parsing fails, return the raw text
+      // If JSON parsing fails, check if it's an error message from Claude
+      const text = textContent.text.toLowerCase();
+      if (text.includes("can't") || text.includes("cannot") || text.includes("unable") || text.includes("don't see")) {
+        return NextResponse.json({ 
+          error: "Couldn't identify food in this image. Please try a clearer photo of your meal." 
+        });
+      }
+      // Return the raw text for debugging
       analysis = { rawResponse: textContent.text };
     }
 
     return NextResponse.json(analysis);
   } catch (error) {
     console.error('Error analyzing plate:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to analyze image' },
+      { error: `Failed to analyze image: ${errorMessage}` },
       { status: 500 }
     );
   }
