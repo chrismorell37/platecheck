@@ -415,44 +415,46 @@ export default function PlateCheck() {
             </div>
           </div>
 
-          {/* Macro Breakdown */}
+          {/* Macro Breakdown - Pie Chart */}
           <div className="bg-white rounded-2xl shadow-sm border border-[#E5E5E5] p-6">
-            <h4 className="font-semibold text-[#1A1A1A] mb-4">Estimated Macros</h4>
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-[#3D3D3D]">Protein</span>
-                  <span className="font-medium text-[#1A1A1A]">{analysis.macroEstimate?.protein || 0}%</span>
-                </div>
-                <div className="h-3 bg-[#F7F6F1] rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-[#C73E3A] rounded-full transition-all duration-500"
-                    style={{ width: `${analysis.macroEstimate?.protein || 0}%` }}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-[#3D3D3D]">Carbohydrates</span>
-                  <span className="font-medium text-[#1A1A1A]">{analysis.macroEstimate?.carbs || 0}%</span>
-                </div>
-                <div className="h-3 bg-[#F7F6F1] rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-[#D4A853] rounded-full transition-all duration-500"
-                    style={{ width: `${analysis.macroEstimate?.carbs || 0}%` }}
-                  />
+            <h4 className="font-semibold text-[#1A1A1A] mb-4 text-center">Estimated Macros</h4>
+            <div className="flex flex-col sm:flex-row items-center gap-6">
+              {/* Pie Chart */}
+              <div className="relative">
+                <div 
+                  className="w-36 h-36 rounded-full transition-all duration-500"
+                  style={{
+                    background: `conic-gradient(
+                      #C73E3A 0% ${analysis.macroEstimate?.protein || 0}%,
+                      #D4A853 ${analysis.macroEstimate?.protein || 0}% ${(analysis.macroEstimate?.protein || 0) + (analysis.macroEstimate?.carbs || 0)}%,
+                      #4A9B4F ${(analysis.macroEstimate?.protein || 0) + (analysis.macroEstimate?.carbs || 0)}% 100%
+                    )`
+                  }}
+                />
+                {/* Center hole for donut effect */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center">
+                    <span className="text-xs text-[#6B6B6B]">100%</span>
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-[#3D3D3D]">Fats</span>
-                  <span className="font-medium text-[#1A1A1A]">{analysis.macroEstimate?.fats || 0}%</span>
+              
+              {/* Legend */}
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 rounded-full bg-[#C73E3A]" />
+                  <span className="text-sm text-[#3D3D3D]">Protein</span>
+                  <span className="text-sm font-semibold text-[#1A1A1A] ml-auto">{analysis.macroEstimate?.protein || 0}%</span>
                 </div>
-                <div className="h-3 bg-[#F7F6F1] rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-[#4A9B4F] rounded-full transition-all duration-500"
-                    style={{ width: `${analysis.macroEstimate?.fats || 0}%` }}
-                  />
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 rounded-full bg-[#D4A853]" />
+                  <span className="text-sm text-[#3D3D3D]">Carbs</span>
+                  <span className="text-sm font-semibold text-[#1A1A1A] ml-auto">{analysis.macroEstimate?.carbs || 0}%</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 rounded-full bg-[#4A9B4F]" />
+                  <span className="text-sm text-[#3D3D3D]">Fats</span>
+                  <span className="text-sm font-semibold text-[#1A1A1A] ml-auto">{analysis.macroEstimate?.fats || 0}%</span>
                 </div>
               </div>
             </div>
