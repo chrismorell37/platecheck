@@ -50,13 +50,13 @@ export default function Home() {
       <section className="pt-28 pb-16 lg:pt-40 lg:pb-24 px-6 bg-white">
         <div className="max-w-4xl mx-auto text-center">
           {/* Main Headline */}
-          <h1 className="font-[family-name:var(--font-instrument-serif)] text-5xl sm:text-6xl lg:text-7xl text-[#1A1A1A] leading-[1.05] tracking-tight mb-6">
+          <h1 className="font-[family-name:var(--font-instrument-serif)] text-5xl sm:text-6xl lg:text-7xl text-[#1A1A1A] leading-[1.05] tracking-[-0.03em] mb-6">
             Eating healthy<br />
             <span className="italic">just got simple</span>
           </h1>
 
           {/* Subhead */}
-          <p className="text-xl sm:text-2xl text-[#3D3D3D] leading-relaxed max-w-xl mx-auto mb-10">
+          <p className="text-xl sm:text-2xl text-[#3D3D3D] leading-snug max-w-xl mx-auto mb-10">
             Snap a photo of your plate. Get instant feedback on your protein, carbs, and fats. No tracking. No counting. Just eat.
           </p>
 
@@ -102,10 +102,10 @@ export default function Home() {
             {/* Step 2 */}
             <div className="text-center">
               <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-[#E5E5E5] flex items-center justify-center mx-auto mb-5">
-                <span className="text-3xl">🤖</span>
+                <span className="text-3xl">🔍</span>
               </div>
               <div className="text-sm font-semibold text-[#4A9B4F] mb-2">Step 2</div>
-              <h3 className="font-semibold text-[#1A1A1A] text-lg mb-2">AI analyzes it</h3>
+              <h3 className="font-semibold text-[#1A1A1A] text-lg mb-2">We analyze it</h3>
               <p className="text-sm text-[#6B6B6B] leading-relaxed">
                 Our AI identifies foods and estimates your protein, carbs, and fats.
               </p>
@@ -114,7 +114,7 @@ export default function Home() {
             {/* Step 3 */}
             <div className="text-center">
               <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-[#E5E5E5] flex items-center justify-center mx-auto mb-5">
-                <span className="text-3xl">✅</span>
+                <span className="text-3xl">⭐</span>
               </div>
               <div className="text-sm font-semibold text-[#4A9B4F] mb-2">Step 3</div>
               <h3 className="font-semibold text-[#1A1A1A] text-lg mb-2">Get feedback</h3>
@@ -157,15 +157,15 @@ export default function Home() {
           {/* Quick Visual Guide */}
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Protein & Fats */}
-            <div className="bg-[#F7F6F1] rounded-2xl overflow-hidden">
-              <div className="p-4">
+            <div className="bg-[#F7F6F1] rounded-2xl overflow-hidden flex flex-col">
+              <div className="p-4 h-48 flex items-center justify-center">
                 <img 
                   src="/Protein.png"
                   alt="Protein and healthy fats"
-                  className="w-full h-auto rounded-xl"
+                  className="w-full h-full object-contain rounded-xl"
                 />
               </div>
-              <div className="px-6 pb-6 text-center">
+              <div className="px-6 pb-6 text-center mt-auto">
                 <h3 className="font-semibold text-[#1A1A1A] text-lg mb-1">Protein & Fats</h3>
                 <p className="text-sm text-[#4A9B4F] font-medium mb-2">Priority #1</p>
                 <p className="text-sm text-[#6B6B6B]">
@@ -175,15 +175,15 @@ export default function Home() {
             </div>
 
             {/* Veggies & Fruits */}
-            <div className="bg-[#F7F6F1] rounded-2xl overflow-hidden">
-              <div className="p-4">
+            <div className="bg-[#F7F6F1] rounded-2xl overflow-hidden flex flex-col">
+              <div className="p-4 h-48 flex items-center justify-center">
                 <img 
                   src="/veg-fruit.png"
                   alt="Vegetables and fruits"
-                  className="w-full h-auto rounded-xl"
+                  className="w-full h-full object-contain rounded-xl"
                 />
               </div>
-              <div className="px-6 pb-6 text-center">
+              <div className="px-6 pb-6 text-center mt-auto">
                 <h3 className="font-semibold text-[#1A1A1A] text-lg mb-1">Veggies & Fruits</h3>
                 <p className="text-sm text-[#4A9B4F] font-medium mb-2">Fill your plate</p>
                 <p className="text-sm text-[#6B6B6B]">
@@ -193,19 +193,19 @@ export default function Home() {
             </div>
 
             {/* Whole Grains */}
-            <div className="bg-[#F7F6F1] rounded-2xl overflow-hidden">
-              <div className="p-4 bg-[#FAF8F3] rounded-xl">
+            <div className="bg-[#F7F6F1] rounded-2xl overflow-hidden flex flex-col">
+              <div className="p-4 h-48 flex items-center justify-center">
                 <img 
                   src="/whole-grains.png"
                   alt="Whole grains"
-                  className="w-full h-auto"
+                  className="w-full h-full object-contain rounded-xl"
                 />
               </div>
-              <div className="px-6 pb-6 text-center">
+              <div className="px-6 pb-6 text-center mt-auto">
                 <h3 className="font-semibold text-[#1A1A1A] text-lg mb-1">Whole Grains</h3>
                 <p className="text-sm text-[#D4A853] font-medium mb-2">Moderate portion</p>
                 <p className="text-sm text-[#6B6B6B]">
-                  Oats, brown rice, quinoa—not refined carbs
+                  Limit refined carbs
                 </p>
               </div>
             </div>
