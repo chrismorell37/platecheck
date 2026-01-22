@@ -5,49 +5,14 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-export async function POST(request: NextRequest) {
-  try {
-    const { image, mediaType } = await request.json();
-
-    if (!image) {
-      return NextResponse.json(
-        { error: 'No image provided' },
-        { status: 400 }
-      );
-    }
-
-    if (!process.env.ANTHROPIC_API_KEY) {
-      return NextResponse.json(
-        { error: 'API key not configured' },
-        { status: 500 }
-      );
-    }
-
-    const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1024,
-      messages: [
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'image',
-              source: {
-                type: 'base64',
-                media_type: mediaType || 'image/jpeg',
-                data: image,
-              },
-            },
-            {
-              type: 'text',
-              text: `You are a nutrition expert analyzing a plate of food based on the new 2025-2030 Dietary Guidelines for Americans (the "New Pyramid").
+const ANALYSIS_PROMPT = `You are a nutrition expert analyzing food based on the new 2025-2030 Dietary Guidelines for Americans (the "New Pyramid").
 
 The New Pyramid prioritizes:
 1. HIGH-QUALITY PROTEIN & HEALTHY FATS (top priority): Meat, fish, eggs, full-fat dairy, olive oil, avocados, nuts
 2. VEGETABLES & FRUITS: Colorful, whole, minimally processed
 3. WHOLE GRAINS (smallest portion): Oats, brown rice, quinoa - NOT refined carbs
 
-Analyze this plate and respond in this exact JSON format:
+Respond in this exact JSON format:
 {
   "foodItems": ["item1", "item2", "item3"],
   "macroEstimate": {
@@ -72,13 +37,71 @@ Analyze this plate and respond in this exact JSON format:
   }
 }
 
-Be encouraging but honest. The macro percentages should add up to 100. The overall score is 0-100. Stars are 1-5.
-If the image doesn't show food, respond with an error message in JSON format: {"error": "Please upload a photo of food"}`,
-            },
-          ],
-        },
-      ],
-    });
+Be encouraging but honest. The macro percentages should add up to 100. The overall score is 0-100. Stars are 1-5.`;
+
+export async function POST(request: NextRequest) {
+  try {
+    const { image, mediaType, foodItems } = await request.json();
+
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return NextResponse.json(
+        { error: 'API key not configured' },
+        { status: 500 }
+      );
+    }
+
+    let response;
+
+    // If foodItems provided, re-analyze based on the food list (no image needed)
+    if (foodItems && Array.isArray(foodItems) && foodItems.length > 0) {
+      response = await anthropic.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        messages: [
+          {
+            role: 'user',
+            content: `${ANALYSIS_PROMPT}
+
+Analyze this list of foods on a plate: ${foodItems.join(', ')}
+
+Keep the foodItems array exactly as provided. Estimate macros, score, and feedback based on these foods.`,
+          },
+        ],
+      });
+    } 
+    // Otherwise, analyze the image
+    else if (image) {
+      response = await anthropic.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'image',
+                source: {
+                  type: 'base64',
+                  media_type: mediaType || 'image/jpeg',
+                  data: image,
+                },
+              },
+              {
+                type: 'text',
+                text: `${ANALYSIS_PROMPT}
+
+Analyze this plate image. If the image doesn't show food, respond with: {"error": "Please upload a photo of food"}`,
+              },
+            ],
+          },
+        ],
+      });
+    } else {
+      return NextResponse.json(
+        { error: 'No image or food items provided' },
+        { status: 400 }
+      );
+    }
 
     // Extract the text content from Claude's response
     const textContent = response.content.find((block) => block.type === 'text');
