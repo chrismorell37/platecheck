@@ -222,12 +222,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 2: Vegetables & Fruits */}
+      {/* Section 2: Vegetables & Fruits - Alternating layout (image left, text right on desktop) */}
       <section className="py-16 lg:py-20 px-6 bg-[#F7F6F1]">
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Left: Text */}
-            <div className="max-w-md">
+            {/* Image card - appears second on mobile, first on desktop */}
+            <div className="bg-white rounded-2xl shadow-sm border border-[#E5E5E5] overflow-hidden p-4 sm:p-6 order-2 lg:order-1">
+              <img 
+                src="/veg-fruit.png"
+                alt="Illustrated vegetables and fruits including broccoli, carrots, tomatoes, lettuce, bananas, apples, grapes, oranges, and berries"
+                className="w-full h-auto"
+              />
+            </div>
+            
+            {/* Text - appears first on mobile, second on desktop */}
+            <div className="max-w-md lg:ml-auto order-1 lg:order-2">
               <div className="flex items-start gap-4 mb-6">
                 <PyramidIndicator activeSection="veggies" />
                 <div>
@@ -253,15 +262,6 @@ export default function Home() {
                   <span className="text-[#3D3D3D]">2 servings per day.</span>
                 </p>
               </div>
-            </div>
-            
-            {/* Right: Image card only */}
-            <div className="bg-white rounded-2xl shadow-sm border border-[#E5E5E5] overflow-hidden p-4 sm:p-6">
-              <img 
-                src="/veg-fruit.png"
-                alt="Illustrated vegetables and fruits including broccoli, carrots, tomatoes, lettuce, bananas, apples, grapes, oranges, and berries"
-                className="w-full h-auto"
-              />
             </div>
           </div>
         </div>
