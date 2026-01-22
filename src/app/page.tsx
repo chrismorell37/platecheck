@@ -75,12 +75,8 @@ export default function Home() {
           {/* What's Changed - Three Points */}
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             <div className="bg-white rounded-2xl shadow-sm border border-[#E5E5E5] overflow-hidden">
-              <div className="bg-[#FAF8F3] p-4 flex items-center justify-center h-28">
-                <img 
-                  src="https://www.eatingwell.com/thmb/YGB1qNYblVg9P2PaEredWBp9hkc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/The-New-Food-Pyramid-Is-Here--Should-You-Actually-Follow-It-embed-74d2b04ca2914479b936adf76250e7b4.jpg"
-                  alt="The New Food Pyramid"
-                  className="h-20 w-auto object-contain"
-                />
+              <div className="bg-[#FAF8F3] p-6 flex items-center justify-center h-28">
+                <div className="text-5xl">🔄</div>
               </div>
               <div className="p-6 text-center">
                 <h3 className="font-semibold text-[#1A1A1A] text-lg mb-2">The Pyramid Is Flipped</h3>
